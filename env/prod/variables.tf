@@ -15,3 +15,14 @@ variable "environment" {
   type        = string
   default     = "prod"
 }
+
+variable "alert_email" {
+  description = "Email address to receive infrastructure and billing alerts."
+  type        = string
+}
+
+variable "billing_alarm_threshold" {
+  description = "Estimated AWS charges threshold in USD for the billing alarm."
+  type        = number
+  default     = 25
+}
