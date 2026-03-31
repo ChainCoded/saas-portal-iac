@@ -39,6 +39,6 @@ module "ec2_app" {
   name_prefix       = local.name_prefix
   subnet_id         = module.network.public_subnet_ids[0]
   security_group_id = module.security_groups.app_security_group_id
-  instance_type     = "t2.micro"
+  instance_type     = "t3.micro"
   app_port          = 8080
 }
