@@ -19,6 +19,7 @@ variable "environment" {
 variable "alert_email" {
   description = "Email address to receive infrastructure and billing alerts."
   type        = string
+  default     = "packetengineer3@gmail.com"
 }
 
 variable "billing_alarm_threshold" {

@@ -31,6 +31,14 @@ resource "aws_security_group" "app" {
   vpc_id      = var.vpc_id
 
   ingress {
+    description = "Temporary app access for admin testing"
+     from_port   = var.app_port
+    to_port     = var.app_port
+    protocol    = "tcp"
+    cidr_blocks = [var.admin_cidr]
+  }
+  
+  ingress {
     description     = "Allow app traffic from ALB only"
     from_port       = var.app_port
     to_port         = var.app_port

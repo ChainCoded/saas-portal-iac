@@ -37,3 +37,48 @@ output "billing_alarm_arn" {
   description = "CloudWatch billing alarm ARN."
   value       = module.budget_alerts.billing_alarm_arn
 }
+
+output "vpc_id" {
+  description = "VPC ID for this environment"
+  value       = module.network.vpc_id
+}
+
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value       = module.network.public_subnet_ids
+}
+
+output "private_subnet_ids" {
+  description = "Private subnet IDs"
+  value       = module.network.private_subnet_ids
+}
+
+output "alb_security_group_id" {
+  description = "Security group ID for the load balancer"
+  value       = module.security_groups.alb_security_group_id
+}
+
+output "app_security_group_id" {
+  description = "Security group ID for the application"
+  value       = module.security_groups.app_security_group_id
+}
+
+output "db_security_group_id" {
+  description = "Security group ID for the database"
+  value       = module.security_groups.db_security_group_id
+}
+
+output "app_instance_id" {
+  description = "EC2 app instance ID"
+  value       = module.ec2_app.instance_id
+}
+
+output "app_public_ip" {
+  description = "Public IP address of the app instance"
+  value       = module.ec2_app.public_ip
+}
+
+output "app_private_ip" {
+  description = "Private IP address of the app instance"
+  value       = module.ec2_app.private_ip
+}

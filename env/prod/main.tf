@@ -13,4 +13,32 @@ module "budget_alerts" {
   sns_topic_arn   = module.monitoring.sns_topic_arn
 }
 
-# Child modules will be added here as the project is built out.
+module "network" {
+  source = "../../modules/network"
+
+  name_prefix          = local.name_prefix
+  vpc_cidr             = "10.0.0.0/16"
+  public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnet_cidrs = ["10.0.11.0/24", "10.0.12.0/24"]
+  availability_zones   = ["us-east-1a", "us-east-1b"]
+}
+
+module "security_groups" {
+  source = "../../modules/security_groups"
+
+  name_prefix = local.name_prefix
+  vpc_id      = module.network.vpc_id
+  app_port    = 8080
+  db_port     = 5432
+  admin_cidr  = "70.191.187.187/32"
+}
+
+module "ec2_app" {
+  source = "../../modules/ec2_app"
+
+  name_prefix       = local.name_prefix
+  subnet_id         = module.network.public_subnet_ids[0]
+  security_group_id = module.security_groups.app_security_group_id
+  instance_type     = "t2.micro"
+  app_port          = 8080
+}
