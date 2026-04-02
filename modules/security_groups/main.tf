@@ -21,7 +21,6 @@ resource "aws_security_group" "alb" {
 
   tags = {
     Name = "${var.name_prefix}-alb-sg"
-    Tier = "public"
   }
 }
 
@@ -37,7 +36,7 @@ resource "aws_security_group" "app" {
     protocol    = "tcp"
     cidr_blocks = [var.admin_cidr]
   }
-  
+
   ingress {
     description     = "Allow app traffic from ALB only"
     from_port       = var.app_port

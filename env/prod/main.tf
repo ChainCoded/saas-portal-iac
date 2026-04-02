@@ -42,3 +42,14 @@ module "ec2_app" {
   instance_type     = "t3.micro"
   app_port          = 8080
 }
+
+module "alb" {
+  source = "../../modules/alb"
+
+  name_prefix           = local.name_prefix
+  vpc_id                = module.network.vpc_id
+  public_subnet_ids     = module.network.public_subnet_ids
+  alb_security_group_id = module.security_groups.alb_security_group_id
+  app_instance_id       = module.ec2_app.instance_id
+  app_port              = var.app_port
+}
