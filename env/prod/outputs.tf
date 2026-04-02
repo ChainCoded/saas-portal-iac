@@ -92,3 +92,23 @@ output "alb_arn" {
   description = "ARN of the Application Load Balancer"
   value       = module.alb.alb_arn
 }
+
+output "db_endpoint" {
+  description = "RDS endpoint"
+  value       = module.rds.db_endpoint
+}
+
+output "db_address" {
+  description = "RDS address"
+  value       = module.rds.db_address
+}
+
+output "db_port" {
+  description = "RDS port"
+  value       = module.rds.db_port
+}
+
+output "db_name" {
+  description = "Database name"
+  value       = module.rds.db_name
+}

@@ -53,3 +53,17 @@ module "alb" {
   app_instance_id       = module.ec2_app.instance_id
   app_port              = var.app_port
 }
+
+module "rds" {
+  source = "../../modules/rds"
+
+  name_prefix          = local.name_prefix
+  private_subnet_ids   = module.network.private_subnet_ids
+  db_security_group_id = module.security_groups.db_security_group_id
+
+  db_name            = var.db_name
+  db_username        = var.db_username
+  db_password        = var.db_password
+  instance_class     = var.db_instance_class
+  allocated_storage  = var.db_allocated_storage
+}

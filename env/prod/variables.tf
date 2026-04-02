@@ -33,3 +33,39 @@ variable "app_port" {
   type        = number
   default     = 8080
 }
+
+variable "db_name" {
+  description = "Initial database name"
+  type        = string
+  default     = "saasportal"
+}
+
+variable "db_username" {
+  description = "Master username for the database"
+  type        = string
+  default     = "postgresadmin"
+}
+
+variable "db_password" {
+  description = "Master password for the database"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_port" {
+  description = "Database port"
+  type        = number
+  default     = 5432
+}
+
+variable "db_instance_class" {
+  description = "RDS instance class"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "RDS allocated storage in GB"
+  type        = number
+  default     = 20
+}
