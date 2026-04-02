@@ -30,7 +30,6 @@ resource "aws_db_instance" "this" {
   multi_az            = false
 
 # Free tier restriction: max 1 day backup retention 
-backup_retention_period = 1
 
   backup_retention_period = 1
   skip_final_snapshot     = true
