@@ -27,3 +27,9 @@ variable "billing_alarm_threshold" {
   type        = number
   default     = 25
 }
+
+variable "app_port" {
+  description = "Port the application runs on"
+  type        = number
+  default     = 8080
+}
