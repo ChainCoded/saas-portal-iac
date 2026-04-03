@@ -112,3 +112,11 @@ output "db_name" {
   description = "Database name"
   value       = module.rds.db_name
 }
+
+output "cognito_user_pool_id" {
+  value = module.cognito.user_pool_id
+}
+
+output "cognito_app_client_id" {
+  value = module.cognito.app_client_id
+}

@@ -67,3 +67,9 @@ module "rds" {
   instance_class     = var.db_instance_class
   allocated_storage  = var.db_allocated_storage
 }
+
+module "cognito" {
+  source = "../../modules/cognito"
+
+  name_prefix = local.name_prefix
+}
