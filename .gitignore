@@ -25,3 +25,5 @@ terraform.rc
 
 *.tfstate
 *.tfstate.*
+
+*.code-workspace

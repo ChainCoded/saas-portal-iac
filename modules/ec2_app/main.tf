@@ -40,6 +40,11 @@ resource "aws_iam_role_policy_attachment" "ssm_core" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+resource "aws_iam_role_policy_attachment" "codedeploy_ec2" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
+}
+
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.name_prefix}-ec2-profile"
   role = aws_iam_role.ec2_role.name
@@ -53,27 +58,39 @@ resource "aws_instance" "app" {
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   associate_public_ip_address = true
 
-  user_data = <<-EOF
-              #!/bin/bash
-              dnf update -y
-              dnf install -y python3
+ user_data = <<-EOF
+            #!/bin/bash
+            set -eux
 
-              cat > /home/ec2-user/app.py <<PYEOF
-              from http.server import BaseHTTPRequestHandler, HTTPServer
+            dnf update -y
+            dnf install -y ruby wget httpd
 
-              class Handler(BaseHTTPRequestHandler):
-                  def do_GET(self):
-                      self.send_response(200)
-                      self.send_header("Content-type", "text/plain")
-                      self.end_headers()
-                      self.wfile.write(b"Hello from saas-portal app server!")
+            systemctl enable httpd
+            systemctl start httpd
 
-              server = HTTPServer(("0.0.0.0", ${var.app_port}), Handler)
-              server.serve_forever()
-              PYEOF
+            cat > /var/www/html/index.html <<HTMLEOF
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>SaaS Portal</title>
+            </head>
+            <body>
+              <h1>SaaS Portal</h1>
+              <p>Initial EC2 bootstrap page. CI/CD deployment will replace this.</p>
+            </body>
+            </html>
+            HTMLEOF
 
-              nohup python3 /home/ec2-user/app.py > /home/ec2-user/app.log 2>&1 &
-              EOF
+            cd /tmp
+            wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+            chmod +x ./install
+            ./install auto
+
+            systemctl enable codedeploy-agent
+            systemctl start codedeploy-agent
+            EOF
 
   tags = {
     Name = "${var.name_prefix}-app"

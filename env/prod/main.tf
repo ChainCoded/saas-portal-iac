@@ -28,9 +28,9 @@ module "security_groups" {
 
   name_prefix = local.name_prefix
   vpc_id      = module.network.vpc_id
-  app_port    = 8080
-  db_port     = 5432
-  admin_cidr  = "70.191.187.187/32"
+  app_port    = var.app_port
+  db_port     = var.db_port
+  admin_cidr  = var.admin_cidr
 }
 
 module "ec2_app" {
@@ -40,7 +40,7 @@ module "ec2_app" {
   subnet_id         = module.network.public_subnet_ids[0]
   security_group_id = module.security_groups.app_security_group_id
   instance_type     = "t3.micro"
-  app_port          = 8080
+  app_port          = var.app_port
 }
 
 module "alb" {
