@@ -16,7 +16,7 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "${substr(var.name_prefix, 0, 20)}-tg"
+  name        = "${substr(var.name_prefix, 0, 17)}-tg-${var.app_port}"
   port        = var.app_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
