@@ -19,8 +19,3 @@ variable "db_port" {
   type        = number
   default     = 5432
 }
-
-variable "admin_cidr" {
-  description = "CIDR block allowed temporary access to the app for testing"
-  type        = string
-}

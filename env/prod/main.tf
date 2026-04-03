@@ -30,7 +30,6 @@ module "security_groups" {
   vpc_id      = module.network.vpc_id
   app_port    = var.app_port
   db_port     = var.db_port
-  admin_cidr  = var.admin_cidr
 }
 
 module "ec2_app" {
