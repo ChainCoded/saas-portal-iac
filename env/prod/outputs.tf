@@ -120,3 +120,13 @@ output "cognito_user_pool_id" {
 output "cognito_app_client_id" {
   value = module.cognito.app_client_id
 }
+
+output "artifact_bucket_name" {
+  description = "Artifact S3 bucket name"
+  value       = module.artifact_bucket.bucket_name
+}
+
+output "artifact_bucket_arn" {
+  description = "Artifact S3 bucket ARN"
+  value       = module.artifact_bucket.bucket_arn
+}
