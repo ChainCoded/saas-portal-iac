@@ -69,3 +69,8 @@ module "artifact_bucket" {
   enable_versioning = true
   force_destroy     = false
 }
+
+module "codedeploy" {
+  source      = "../../modules/codedeploy"
+  name_prefix = local.name_prefix
+}

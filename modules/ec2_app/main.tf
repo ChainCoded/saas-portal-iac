@@ -63,7 +63,7 @@ user_data = <<-EOF
             set -eux
 
             dnf update -y
-            dnf install -y ruby wget httpd
+            dnf install -y ruby wget httpd curl
 
             sed -i 's/^Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
             sed -i 's/<VirtualHost \\*:80>/<VirtualHost *:8080>/' /etc/httpd/conf/httpd.conf || true
