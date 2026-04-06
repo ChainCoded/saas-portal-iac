@@ -58,12 +58,15 @@ resource "aws_instance" "app" {
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   associate_public_ip_address = true
 
- user_data = <<-EOF
+user_data = <<-EOF
             #!/bin/bash
             set -eux
 
             dnf update -y
             dnf install -y ruby wget httpd
+
+            sed -i 's/^Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
+            sed -i 's/<VirtualHost \\*:80>/<VirtualHost *:8080>/' /etc/httpd/conf/httpd.conf || true
 
             systemctl enable httpd
             systemctl start httpd
@@ -83,6 +86,10 @@ resource "aws_instance" "app" {
             </html>
             HTMLEOF
 
+            cat > /var/www/html/health.html <<HTMLEOF
+            OK
+            HTMLEOF
+
             cd /tmp
             wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
             chmod +x ./install
@@ -90,6 +97,8 @@ resource "aws_instance" "app" {
 
             systemctl enable codedeploy-agent
             systemctl start codedeploy-agent
+
+            systemctl restart httpd
             EOF
 
   tags = {
