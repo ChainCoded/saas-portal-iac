@@ -53,11 +53,6 @@ output "private_subnet_ids" {
   value       = module.network.private_subnet_ids
 }
 
-output "alb_security_group_id" {
-  description = "Security group ID for the load balancer"
-  value       = module.security_groups.alb_security_group_id
-}
-
 output "app_security_group_id" {
   description = "Security group ID for the application"
   value       = module.security_groups.app_security_group_id
