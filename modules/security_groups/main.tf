@@ -1,6 +1,6 @@
 resource "aws_security_group" "app" {
   name        = "${var.name_prefix}-app-sg"
-  description = "Security group for the app EC2 instance"
+  description = "Security group for application instances"
   vpc_id      = var.vpc_id
 
   ingress {
