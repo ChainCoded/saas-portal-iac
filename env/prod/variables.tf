@@ -74,3 +74,7 @@ variable "artifact_bucket_name" {
   description = "Name of the S3 artifact bucket"
   type        = string
 }
+
+variable "github_token" {
+  sensitive = true
+}
