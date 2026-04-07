@@ -6,3 +6,7 @@ variable "github_repo" {}
 variable "github_branch" {
   default = "main"
 }
+
+variable "github_token" {
+  sensitive = true
+}

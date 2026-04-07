@@ -78,11 +78,15 @@ module "codedeploy" {
 module "cicd" {
   source = "../../modules/cicd"
 
-  name_prefix                   = local.name_prefix
-  artifact_bucket               = module.artifact_bucket.bucket_name
-  codedeploy_app_name           = module.codedeploy.app_name
-  codedeploy_deployment_group   = module.codedeploy.deployment_group_name
+  name_prefix = local.name_prefix
+
+  artifact_bucket = module.artifact_bucket.bucket_name
+
+  codedeploy_app_name         = module.codedeploy.app_name
+  codedeploy_deployment_group = module.codedeploy.deployment_group_name
 
   github_repo   = "your-repo-name"
   github_branch = "main"
+
+  github_token = var.github_token
 }
