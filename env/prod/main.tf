@@ -79,7 +79,7 @@ module "cicd" {
   source = "../../modules/cicd"
 
   name_prefix                   = local.name_prefix
-  artifact_bucket               = module.artifact_bucket.aws_s3_bucket.this.bucket
+  artifact_bucket               = module.artifact_bucket.bucket_name
   codedeploy_app_name           = module.codedeploy.app_name
   codedeploy_deployment_group   = module.codedeploy.deployment_group_name
 
