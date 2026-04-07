@@ -79,7 +79,7 @@ resource "aws_codepipeline" "pipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        Owner      = "YOUR_GITHUB_USERNAME"
+        Owner      = ChainCoded
         Repo       = var.github_repo
         Branch     = var.github_branch
         OAuthToken = var.github_token
