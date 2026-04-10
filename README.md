@@ -70,9 +70,12 @@ CloudWatch metrics and alarms
 SNS email alerts
 AWS Budget with threshold alerts
 Billing alarm for real-time cost visibility
+
 CI/CD Pipeline
-Status:
-In Progress / Complete (update based on version)
+Source: GitHub (trigger on push to main)
+Build: AWS CodeBuild (artifact packaging)
+Deploy: AWS CodeDeploy (EC2 deployment)
+Infrastructure managed via Terraform Cloud
 Components:
 CodePipeline (orchestration)
 CodeBuild (build process)
@@ -100,12 +103,7 @@ Roadmap
  Expand monitoring and logging
  Integrate GitHub-triggered deployments
 
-Resume Summary
-
-Built and operated a production-style AWS environment using Terraform, including VPC networking, EC2, RDS, Cognito authentication, monitoring, and CI/CD automation, while maintaining strict cost controls and resolving real-world infrastructure issues.
-
 Author
 
 Marcus Garcia
 Cloud Engineer | AWS | Terraform | Networking
-LinkedIn

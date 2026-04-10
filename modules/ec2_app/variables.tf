@@ -22,5 +22,5 @@ variable "instance_type" {
 variable "app_port" {
   description = "Application port"
   type        = number
-  default     = 8080
+  default     = 80
 }

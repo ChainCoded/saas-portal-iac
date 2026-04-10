@@ -24,7 +24,7 @@ resource "aws_lb_target_group" "this" {
 
   health_check {
     enabled             = true
-    path                = "/"
+    path                = "/health.html"
     protocol            = "HTTP"
     matcher             = "200-399"
     interval            = 30
