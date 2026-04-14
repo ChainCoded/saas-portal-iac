@@ -58,15 +58,14 @@ resource "aws_instance" "app" {
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   associate_public_ip_address = true
 
+user_data_replace_on_change = true
+
 user_data = <<-EOF
             #!/bin/bash
-            set -eux
+            set -euxo pipefail
 
             dnf update -y
             dnf install -y ruby wget httpd curl
-
-            sed -i 's/^Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
-            sed -i 's/<VirtualHost \\*:80>/<VirtualHost *:8080>/' /etc/httpd/conf/httpd.conf || true
 
             systemctl enable httpd
             systemctl start httpd
