@@ -33,6 +33,10 @@ resource "aws_lb_target_group" "this" {
     unhealthy_threshold = 2
   }
 
+  lifecycle {
+  create_before_destroy = true
+  }
+
   tags = {
     Name = "${var.name_prefix}-tg"
   }
