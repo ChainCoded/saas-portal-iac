@@ -11,7 +11,7 @@ variable "vpc_id" {
 variable "app_port" {
   description = "Port the application listens on"
   type        = number
-  default     = 8080
+  default     = 80
 }
 
 variable "db_port" {
