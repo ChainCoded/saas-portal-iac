@@ -62,10 +62,9 @@ user_data_replace_on_change = true
 
 user_data = <<-EOF
             #!/bin/bash
-            set -euxo pipefail
+            set -eux
 
-            dnf update -y
-            dnf install -y ruby wget httpd curl
+            dnf install -y ruby wget httpd
 
             systemctl enable httpd
             systemctl start httpd
