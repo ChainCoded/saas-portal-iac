@@ -16,6 +16,11 @@ resource "aws_iam_role_policy_attachment" "codepipeline_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
+resource "aws_codestarconnections_connection" "github" {
+  name          = "${var.name_prefix}-github-connection"
+  provider_type = "GitHub"
+}
+
 resource "aws_codebuild_project" "build" {
   name         = "${var.name_prefix}-build"
   service_role = aws_iam_role.codebuild_role.arn
@@ -73,19 +78,19 @@ resource "aws_codepipeline" "pipeline" {
     action {
       name             = "Source"
       category         = "Source"
-      owner            = "ThirdParty"
-      provider         = "GitHub"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["source_output"]
 
       configuration = {
-        Owner      = "ChainCoded"
-        Repo       = var.github_repo
-        Branch     = var.github_branch
-        OAuthToken = var.github_token
-      }
+        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        FullRepositoryId = var.github_full_repository_id
+        BranchName       = var.github_branch
+        DetectChanges    = "true"
     }
   }
+}
 
   # ----------------
   # BUILD STAGE

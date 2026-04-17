@@ -1,12 +1,26 @@
-variable "name_prefix" {}
-variable "artifact_bucket" {}
-variable "codedeploy_app_name" {}
-variable "codedeploy_deployment_group" {}
-variable "github_repo" {}
-variable "github_branch" {
-  default = "main"
+variable "name_prefix" {
+  type = string
 }
 
-variable "github_token" {
-  sensitive = true
+variable "artifact_bucket" {
+  type = string
+}
+
+variable "codedeploy_app_name" {
+  type = string
+}
+
+variable "codedeploy_deployment_group" {
+  type = string
+}
+
+variable "github_full_repository_id" {
+  description = "GitHub repo in owner/repo format"
+  type        = string
+}
+
+variable "github_branch" {
+  description = "GitHub branch to track"
+  type        = string
+  default     = "main"
 }
