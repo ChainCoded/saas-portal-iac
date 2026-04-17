@@ -87,6 +87,7 @@ module "cicd" {
 
   github_full_repository_id = "ChainCoded/saas-portal-app"
   github_branch             = "main"
+  connection_arn              = "arn:aws:codeconnections:us-east-1:602498847849:connection/0da23171-2f2d-4fb3-92d4-31a5036993f4"
 }
 
 module "alb" {

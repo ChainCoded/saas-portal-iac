@@ -16,11 +16,6 @@ resource "aws_iam_role_policy_attachment" "codepipeline_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-resource "aws_codestarconnections_connection" "github" {
-  name          = "${var.name_prefix}-gh"
-  provider_type = "GitHub"
-}
-
 resource "aws_codebuild_project" "build" {
   name         = "${var.name_prefix}-build"
   service_role = aws_iam_role.codebuild_role.arn
@@ -96,7 +91,7 @@ resource "aws_codepipeline" "pipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        ConnectionArn = var.connection_arn
         FullRepositoryId = var.github_full_repository_id
         BranchName       = var.github_branch
         DetectChanges    = "false"

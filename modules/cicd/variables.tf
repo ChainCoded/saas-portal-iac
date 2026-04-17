@@ -24,3 +24,8 @@ variable "github_branch" {
   type        = string
   default     = "main"
 }
+
+variable "connection_arn" {
+  description = "CodeConnections ARN for GitHub source"
+  type        = string
+}
