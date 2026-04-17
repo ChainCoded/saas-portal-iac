@@ -74,7 +74,7 @@ resource "aws_codepipeline" "pipeline" {
     provider_type = "CodeStarSourceConnection"
 
     git_configuration {
-      source_action_name = "Source"
+      source_action_name = "SourceAction"
 
       push {
         branches {
@@ -88,7 +88,7 @@ resource "aws_codepipeline" "pipeline" {
     name = "Source"
 
     action {
-      name             = "Source"
+      name             = "SourceAction"
       category         = "Source"
       owner            = "AWS"
       provider         = "CodeStarSourceConnection"
