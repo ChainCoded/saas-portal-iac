@@ -61,17 +61,29 @@ resource "aws_iam_role_policy_attachment" "codebuild_policy" {
 }
 
 resource "aws_codepipeline" "pipeline" {
-  name     = "${var.name_prefix}-pipeline"
-  role_arn = aws_iam_role.codepipeline_role.arn
+  name          = "${var.name_prefix}-pipeline"
+  role_arn      = aws_iam_role.codepipeline_role.arn
+  pipeline_type = "V2"
 
   artifact_store {
     location = var.artifact_bucket
     type     = "S3"
   }
 
-  # ----------------
-  # SOURCE STAGE
-  # ----------------
+  trigger {
+    provider_type = "CodeStarSourceConnection"
+
+    git_configuration {
+      source_action_name = "Source"
+
+      push {
+        branches {
+          includes = ["main"]
+        }
+      }
+    }
+  }
+
   stage {
     name = "Source"
 
@@ -88,13 +100,10 @@ resource "aws_codepipeline" "pipeline" {
         FullRepositoryId = var.github_full_repository_id
         BranchName       = var.github_branch
         DetectChanges    = "true"
+      }
     }
   }
-}
 
-  # ----------------
-  # BUILD STAGE
-  # ----------------
   stage {
     name = "Build"
 
@@ -113,9 +122,6 @@ resource "aws_codepipeline" "pipeline" {
     }
   }
 
-  # ----------------
-  # DEPLOY STAGE
-  # ----------------
   stage {
     name = "Deploy"
 
@@ -124,7 +130,7 @@ resource "aws_codepipeline" "pipeline" {
       category        = "Deploy"
       owner           = "AWS"
       provider        = "CodeDeploy"
-      version          = "1"
+      version         = "1"
       input_artifacts = ["build_output"]
 
       configuration = {
