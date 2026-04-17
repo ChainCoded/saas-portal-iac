@@ -17,7 +17,7 @@ resource "aws_iam_role_policy_attachment" "codepipeline_policy" {
 }
 
 resource "aws_codestarconnections_connection" "github" {
-  name          = "${var.name_prefix}-github-connection"
+  name          = "${var.name_prefix}-gh"
   provider_type = "GitHub"
 }
 
