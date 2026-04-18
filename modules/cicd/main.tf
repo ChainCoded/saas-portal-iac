@@ -11,9 +11,95 @@ resource "aws_iam_role" "codepipeline_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "codepipeline_policy" {
-  role       = aws_iam_role.codepipeline_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+data "aws_iam_policy_document" "codepipeline_policy" {
+  statement {
+    sid    = "ArtifactBucketAccess"
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketVersioning",
+      "s3:GetBucketAcl",
+      "s3:GetBucketLocation"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.artifact_bucket}"
+    ]
+  }
+
+  statement {
+    sid    = "ArtifactObjectAccess"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:PutObjectTagging",
+      "s3:GetObjectTagging",
+      "s3:GetObjectVersionTagging"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.artifact_bucket}/*"
+    ]
+  }
+
+  statement {
+    sid    = "UseCodeConnection"
+    effect = "Allow"
+    actions = [
+      "codeconnections:UseConnection",
+      "codestar-connections:UseConnection"
+    ]
+    resources = [
+      var.connection_arn
+    ]
+  }
+
+  statement {
+    sid    = "StartAndReadCodeBuild"
+    effect = "Allow"
+    actions = [
+      "codebuild:StartBuild",
+      "codebuild:BatchGetBuilds"
+    ]
+    resources = [
+      aws_codebuild_project.build.arn
+    ]
+  }
+
+  statement {
+    sid    = "CodeDeployDeploy"
+    effect = "Allow"
+    actions = [
+      "codedeploy:CreateDeployment",
+      "codedeploy:GetApplication",
+      "codedeploy:GetDeployment",
+      "codedeploy:RegisterApplicationRevision",
+      "codedeploy:ListDeployments",
+      "codedeploy:ListDeploymentGroups",
+      "codedeploy:GetDeploymentGroup"
+    ]
+    resources = [
+      "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:application:${var.codedeploy_app_name}",
+      "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:deploymentgroup:${var.codedeploy_app_name}/*"
+    ]
+  }
+
+  statement {
+    sid    = "CodeDeployConfigRead"
+    effect = "Allow"
+    actions = [
+      "codedeploy:GetDeploymentConfig"
+    ]
+    resources = [
+      "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:deploymentconfig:*"
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "codepipeline_inline_policy" {
+  name   = "${var.name_prefix}-codepipeline-inline"
+  role   = aws_iam_role.codepipeline_role.id
+  policy = data.aws_iam_policy_document.codepipeline_policy.json
 }
 
 resource "aws_codebuild_project" "build" {

@@ -29,3 +29,7 @@ variable "connection_arn" {
   description = "CodeConnections ARN for GitHub source"
   type        = string
 }
+
+variable "aws_region" {
+  type = string
+}
