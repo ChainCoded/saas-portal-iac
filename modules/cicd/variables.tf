@@ -33,3 +33,8 @@ variable "connection_arn" {
 variable "aws_region" {
   type = string
 }
+
+variable "sns_topic_arn" {
+  description = "SNS topic ARN for CI/CD alerts"
+  type        = string
+}

@@ -294,11 +294,11 @@ resource "aws_cloudwatch_event_rule" "pipeline_failures" {
 resource "aws_cloudwatch_event_target" "pipeline_failures_target" {
   rule      = aws_cloudwatch_event_rule.pipeline_failures.name
   target_id = "SendToSNS"
-  arn       = aws_sns_topic.alerts.arn
+  arn       = var.sns_topic_arn
 }
 
 resource "aws_sns_topic_policy" "allow_eventbridge" {
-  arn = aws_sns_topic.alerts.arn
+  arn = var.sns_topic_arn
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -309,7 +309,7 @@ resource "aws_sns_topic_policy" "allow_eventbridge" {
           Service = "events.amazonaws.com"
         }
         Action   = "sns:Publish"
-        Resource = aws_sns_topic.alerts.arn
+        Resource = var.sns_topic_arn
       }
     ]
   })
