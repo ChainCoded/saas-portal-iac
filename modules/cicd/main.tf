@@ -265,3 +265,52 @@ resource "aws_codepipeline" "pipeline" {
     }
   }
 }
+
+resource "aws_cloudwatch_event_rule" "pipeline_failures" {
+  name        = "${var.name_prefix}-pipeline-failures"
+  description = "Trigger on CI/CD failures"
+
+  event_pattern = jsonencode({
+    "source": [
+      "aws.codepipeline",
+      "aws.codebuild",
+      "aws.codedeploy"
+    ],
+    "detail-type": [
+      "CodePipeline Pipeline Execution State Change",
+      "CodeBuild Build State Change",
+      "CodeDeploy Deployment State-change Notification"
+    ],
+    "detail": {
+      "state": [
+        "FAILED",
+        "STOPPED",
+        "CANCELED"
+      ]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "pipeline_failures_target" {
+  rule      = aws_cloudwatch_event_rule.pipeline_failures.name
+  target_id = "SendToSNS"
+  arn       = aws_sns_topic.alerts.arn
+}
+
+resource "aws_sns_topic_policy" "allow_eventbridge" {
+  arn = aws_sns_topic.alerts.arn
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+        Action   = "sns:Publish"
+        Resource = aws_sns_topic.alerts.arn
+      }
+    ]
+  })
+}
