@@ -50,9 +50,58 @@ resource "aws_iam_role" "codebuild_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "codebuild_policy" {
-  role       = aws_iam_role.codebuild_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "codebuild_policy" {
+  statement {
+    sid    = "CloudWatchLogs"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${aws_codebuild_project.build.name}",
+      "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${aws_codebuild_project.build.name}:*"
+    ]
+  }
+
+  statement {
+    sid    = "ArtifactBucketReadWrite"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.artifact_bucket}/*"
+    ]
+  }
+
+  statement {
+    sid    = "ArtifactBucketIdentity"
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketAcl",
+      "s3:GetBucketLocation"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.artifact_bucket}"
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "codebuild_inline_policy" {
+  name   = "${var.name_prefix}-codebuild-inline"
+  role   = aws_iam_role.codebuild_role.id
+  policy = data.aws_iam_policy_document.codebuild_policy.json
+}
+
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
 }
 
 resource "aws_codepipeline" "pipeline" {

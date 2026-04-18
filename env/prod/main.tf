@@ -79,6 +79,7 @@ module "cicd" {
   source = "../../modules/cicd"
 
   name_prefix = local.name_prefix
+  aws_region  = var.aws_region
 
   artifact_bucket = module.artifact_bucket.bucket_name
 
