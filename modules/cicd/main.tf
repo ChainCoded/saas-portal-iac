@@ -185,11 +185,6 @@ resource "aws_iam_role_policy" "codebuild_inline_policy" {
   policy = data.aws_iam_policy_document.codebuild_policy.json
 }
 
-variable "aws_region" {
-  description = "AWS region"
-  type        = string
-}
-
 resource "aws_codepipeline" "pipeline" {
   name          = "${var.name_prefix}-pipeline"
   role_arn      = aws_iam_role.codepipeline_role.arn
